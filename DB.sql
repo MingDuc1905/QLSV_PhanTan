@@ -1,0 +1,69 @@
+﻿CREATE DATABASE QuanLySinhVien;
+GO
+
+USE QuanLySinhVien;
+GO
+
+CREATE TABLE KHOA (
+    MaKhoa CHAR(10) PRIMARY KEY,
+    TenKhoa NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE LOP (
+    MaLop CHAR(10) PRIMARY KEY,
+    TenLop NVARCHAR(50) NOT NULL,
+    MaKhoa CHAR(10),
+    FOREIGN KEY (MaKhoa) REFERENCES KHOA(MaKhoa)
+);
+
+CREATE TABLE SINHVIEN (
+    MSSV CHAR(10) PRIMARY KEY,
+    HoTen NVARCHAR(50) NOT NULL,
+    GioiTinh NVARCHAR(5),
+    NgaySinh DATE,
+    HocBong BIT DEFAULT 0,
+    MaLop CHAR(10),
+    FOREIGN KEY (MaLop) REFERENCES LOP(MaLop)
+);
+
+CREATE TABLE MONHOC (
+    MsMon CHAR(10) PRIMARY KEY,
+    TenMon NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE DANGKY (
+    MSSV CHAR(10),
+    MsMon CHAR(10),
+    Diem1 FLOAT,
+    Diem2 FLOAT,
+    Diem3 FLOAT,
+    PRIMARY KEY (MSSV, MsMon),
+    FOREIGN KEY (MSSV) REFERENCES SINHVIEN(MSSV),
+    FOREIGN KEY (MsMon) REFERENCES MONHOC(MsMon)
+);
+
+INSERT INTO KHOA VALUES
+('CNTT', N'Công nghệ thông tin'),
+('KT', N'Kinh tế'),
+('SP', N'Sư phạm');
+
+INSERT INTO LOP VALUES
+('CNTT01', N'Lớp CNTT 01', 'CNTT'),
+('CNTT02', N'Lớp CNTT 02', 'CNTT'),
+('KT01',   N'Lớp Kinh Tế 01', 'KT');
+
+INSERT INTO SINHVIEN VALUES
+('SV001', N'Nguyễn Văn A', N'Nam', '2004-05-10', 1, 'CNTT01'),
+('SV002', N'Trần Thị B',   N'Nữ',  '2003-12-20', 0, 'CNTT02'),
+('SV003', N'Lê Văn C',     N'Nam', '2004-02-15', 0, 'KT01');
+
+INSERT INTO MONHOC VALUES
+('MH01', N'Cơ sở dữ liệu'),
+('MH02', N'Lập trình Java'),
+('MH03', N'Kinh tế vĩ mô');
+
+INSERT INTO DANGKY VALUES
+('SV001', 'MH01', 9.0, 8.5, NULL),
+('SV001', 'MH02', 7.0, NULL, NULL),
+('SV002', 'MH01', 5.0, 6.0, 7.0),
+('SV003', 'MH03', 8.0, 8.0, NULL);
